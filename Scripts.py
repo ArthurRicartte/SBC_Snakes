@@ -7,6 +7,336 @@ depois que baixar o python 3.9.13 vai no terminal e cola:
 1 -> .\venv_sbc\Scripts\activate
 1 -> pip install -r requirements.txt
 """
+from experta import KnowledgeEngine, Rule, Fact, MATCH, AS
+from experta import P    # predicates (e.g. P(lambda x: x > 37.8))
+from experta import OR, AND, NOT
+from rich import print
+#Definindo as classes que vão servir como fatos:
+class Cobra(Fact):
+    """
+    Será o fato de entrada na memória de trabalho, pode conter as caracterísitcas físicas de uma cobra:
+    Tamanho_médio = float
+    local_encontrado = onde o usuário encontrou o animal = floresta, sertão (caatinga), área residencial, árvore, etc 
+    eh_agressiva = (valor booleano sim ou não)
+    cor = string
+    padrão_corpo = string descrevendo brevemente os padrões de corpo do animal
+    tem_fosseta_loreal = (Valor booleano sim ou não)
+    padrão_cauda = string descrevendo a cauda do animal. ex = chocalho, cauda pontuda...
+    """
+    pass
 
-for c in range(67):
-    print(f"{c + 1} Testando")
+class Familia(Fact):
+    """
+    Fato que será derivada a partir do fato Cobra(), teremos 4 famílias possíveis:
+    - Viperidae: Para a Cascavel e Jararaca-da-Caatinga
+    - Elapidae: Coral-verdadeira
+    - Colubridae: Falsa-coral, Cobra-cipó-verde e Corre-campo
+    - Boidae: Jiboia
+    """
+    pass
+
+class Genero(Fact):
+    """
+    Fato que deriva da Família e de algumas característica da cobra, os possíveis valores são:
+    - Bothrops: Jararaca-da-Caatinga 
+    - Crotalus: Cascavel
+    - Micrurus: Coral-verdadeira
+    - Oxyrhopus: Falsa-coral
+    - Boa: Jiboia
+    - Philodryas: Cobra-cipó-verde e Corre-campo
+    """
+    pass
+
+class Diagnostico(Fact):
+    """"
+    Resposta final: Gênero + informações específicas da cobra (onde foi encontrada). Possíveis respostas:
+    - Jararaca-da-Caatinga (Bothrops erythromelas)
+    - Cascavel (Crotalus durissus)
+    - Coral-verdadeira (Micrurus ibiboboca)
+    - Falsa-coral (Oxyrhopus trigeminus / Apostolepis cearensis)
+    - Jiboia (Boa constrictor)
+    - Cobra-cipó-verde (Philodryas olfersii) 
+    - Corre-campo (Philodryas nattereri)
+    """
+    pass
+
+#Base de Conhecimento:
+class ProcessoIdentificacao(KnowledgeEngine):
+    #Regra 1: tentativa de disparar regra de saliência máxima: Caso a cobra tenha chocalho na cauda -> Cascavél (Característica muito predominante)
+    @Rule(Cobra(nome=MATCH.nome, cauda="chocalho"), NOT(Diagnostico(nome=MATCH.nome)), salience=100)
+    def atalho_cascavel(self, nome):
+        print(f"[red][SALIENCE 100] [Regra 1][/]: Chocalho detectado! {nome} é uma Cascavel (Crotalus durissus).") #Testando o print do rich
+        self.declare(Diagnostico(
+            nome=nome,
+            nome_popular="Cascavel",
+            nome_cientifico="Crotalus durissus",
+            familia="Viperidae"
+        ))
+
+    #Nível 1 de encadeamento: A partir de características da cobra derivamos uma família:
+    
+    #Regra 2: Família Viperidae (Jararaca e Cascavel)
+    @Rule(
+        Cobra(nome=MATCH.nome, tem_fosseta_loreal =True),
+        NOT(Diagnostico(nome=MATCH.nome))
+    )
+    def nivel1_viperidae(self, nome):
+        print(f"[Nível 1] [Regra 2]: Fosseta loreal detectada -> {nome} pertence à família Viperidae")
+        self.declare(Familia(nome=nome, familia="Viperidae"))
+
+    #Regra 3: Família Elapidae (Coral-verdadeira)
+    @Rule(
+        Cobra(nome=MATCH.nome, tem_fosseta_loreal=False, padrao_corpo="aneis_completos"),
+        NOT(Diagnostico(nome=MATCH.nome))
+    )
+    def nivel1_elapidae(self, nome):
+        print(f"[Nível 1] [Regra 3]: Sem fosseta + Anéis completos -> {nome} pertence à família Elapidae")
+        self.declare(Familia(nome=nome, familia="Elapidae"))
+
+    #Regra 4: Família Boidae (Jiboia)
+    @Rule(
+        Cobra(nome=MATCH.nome, tem_fosseta_loreal=False, tamanho_medio=P(lambda t: t >= 2.0)),
+        NOT(Diagnostico(nome=MATCH.nome))
+    )
+    def nivel1_boidae(self, nome):
+        print(f"[Nível 1] [Regra 4]: Sem fosseta + Porte grande (>= 2m) -> {nome} pertence à família Boidae")
+        self.declare(Familia(nome=nome, familia="Boidae"))
+
+    #Regra 5: Família Colubridae (Falsa-coral, Cobra-cipó-verde, Corre-campo)
+    @Rule(
+        Cobra(
+            nome=MATCH.nome, 
+            tem_fosseta_loreal=False, 
+            tamanho_medio=P(lambda t: t < 2.0),
+            padrao_corpo=P(lambda p: p != "aneis_completos")  # Impede capturar a Coral-verdadeira
+        ),
+        NOT(Diagnostico(nome=MATCH.nome))
+    )
+    def nivel1_colubridae(self, nome):
+        print(f"[Nível 1] [Regra 5]: Sem fosseta + Porte < 2m + Sem anéis completos -> {nome} pertence à família Colubridae")
+        self.declare(Familia(nome=nome, familia="Colubridae"))
+
+    #Nível 2 de derivação de fatos: Família() + Cobra() -> Genero():
+    
+    # Regra 6: Gênero Bothrops (Jararaca-da-Caatinga)
+    @Rule(
+        Familia(nome=MATCH.nome, familia="Viperidae"),
+        Cobra(nome=MATCH.nome, padrao_corpo="triângulos"),
+        NOT(Diagnostico(nome=MATCH.nome))
+    )
+    def nivel2_bothrops(self, nome):
+        print(f"[Nível 2] [Regra 6]: Viperidae + Desenhos em triângulos -> {nome} pertence ao gênero Bothrops")
+        self.declare(Genero(nome=nome, genero="Bothrops"))
+
+    # Regra 7: Gênero Micrurus (Coral-verdadeira)
+    @Rule(
+        Familia(nome=MATCH.nome, familia="Elapidae"),
+        Cobra(nome=MATCH.nome, padrao_corpo="aneis_completos"),
+        NOT(Diagnostico(nome=MATCH.nome))
+    )
+    def nivel2_micrurus(self, nome):
+        print(f"[Nível 2] [Regra 7]: Elapidae + Anéis coloridos completos -> {nome} pertence ao gênero Micrurus")
+        self.declare(Genero(nome=nome, genero="Micrurus"))
+
+    # Regra 8: Gênero Oxyrhopus (Falsa-coral)
+    @Rule(
+        Familia(nome=MATCH.nome, familia="Colubridae"),
+        Cobra(nome=MATCH.nome, padrao_corpo="aneis_incompletos"),
+        NOT(Diagnostico(nome=MATCH.nome))
+    )
+    def nivel2_oxyrhopus(self, nome):
+        print(f"[Nível 2] [Regra 8]: Colubridae + Anéis incompletos -> {nome} pertence ao gênero Oxyrhopus")
+        self.declare(Genero(nome=nome, genero="Oxyrhopus"))
+
+    # Regra 9: Gênero Philodryas (Cobra-cipó-verde e Corre-campo)
+    #Possível conflito: Cobra corre campo e Cobra cipó pertencem ao mesmo gênero
+    #Solução: Utilizar o OR
+    @Rule(
+        Familia(nome=MATCH.nome, familia="Colubridae"),
+        OR(
+            Cobra(nome=MATCH.nome, cor="verde"),
+            Cobra(nome=MATCH.nome, cor="marrom_amarelo")
+        ),
+        NOT(Diagnostico(nome=MATCH.nome))
+    )
+    def nivel2_philodryas(self, nome):
+        print(f"[Nível 2] [Regra 9]: Colubridae + Cor verde ou marrom/amarelo -> {nome} pertence ao gênero Philodryas")
+        self.declare(Genero(nome=nome, genero="Philodryas"))
+
+    # Regra 10: Gênero Boa (Jiboia)
+    @Rule(
+        Familia(nome=MATCH.nome, familia="Boidae"),
+        Cobra(nome=MATCH.nome, padrao_corpo="listras_largas"),
+        NOT(Diagnostico(nome=MATCH.nome))
+    )
+    def nivel2_boa(self, nome):
+        print(f"[Nível 2] [Regra 10]: Boidae + Listras largas transversais -> {nome} pertence ao gênero Boa")
+        self.declare(Genero(nome=nome, genero="Boa"))
+
+
+    #Regras de nível 3: Genero() + Cobra() -> Diagnóstico final = Nome cobra + Nome científico
+    
+    # Regra 11: Jararaca-da-Caatinga
+    @Rule(
+        Genero(nome=MATCH.nome, genero="Bothrops"),
+        Cobra(nome=MATCH.nome, cor="marrom_cinza"),
+        OR(
+            Cobra(nome=MATCH.nome, local_encontrado="floresta"),
+            Cobra(nome=MATCH.nome, local_encontrado="area_urbana")
+        ),
+        NOT(Diagnostico(nome=MATCH.nome))
+    )
+    def nivel3_jararaca(self, nome):
+        print(f"[Nível 3] [Regra 11]: Gênero Bothrops + Marrom/Cinza + Floresta/Área Urbana -> Diagnóstico: Jararaca-da-Caatinga")
+        self.declare(Diagnostico(
+            nome=nome,
+            nome_popular="Jararaca-da-Caatinga",
+            nome_cientifico="Bothrops erythromelas",
+            familia="Viperidae",
+            genero="Bothrops"
+        ))
+
+    # Regra 12: Coral-verdadeira
+    @Rule(
+        Genero(nome=MATCH.nome, genero="Micrurus"),
+        Cobra(nome=MATCH.nome, padrao_cauda="curta", local_encontrado="subterraneo"),
+        NOT(Diagnostico(nome=MATCH.nome))
+    )
+    def nivel3_coral_verdadeira(self, nome):
+        print(f"[Nível 3] [Regra 12]: Gênero Micrurus + Cauda curta + Subterrâneo -> Diagnóstico: Coral-verdadeira")
+        self.declare(Diagnostico(
+            nome=nome,
+            nome_popular="Coral-verdadeira",
+            nome_cientifico="Micrurus ibiboboca",
+            familia="Elapidae",
+            genero="Micrurus"
+        ))
+
+    # Regra 13: Falsa-coral
+    @Rule(
+        Genero(nome=MATCH.nome, genero="Oxyrhopus"),
+        Cobra(nome=MATCH.nome, padrao_cauda="longa", local_encontrado="caatinga_terrestre"),
+        NOT(Diagnostico(nome=MATCH.nome))
+    )
+    def nivel3_falsa_coral(self, nome):
+        print(f"[Nível 3] [Regra 13]: Gênero Oxyrhopus + Cauda longa + Caatinga Terrestre -> Diagnóstico: Falsa-coral")
+        self.declare(Diagnostico(
+            nome=nome,
+            nome_popular="Falsa-coral",
+            nome_cientifico="Oxyrhopus trigeminus",
+            familia="Colubridae",
+            genero="Oxyrhopus"
+        ))
+
+    # Regra 14: Cobra-cipó-verde
+    @Rule(
+        Genero(nome=MATCH.nome, genero="Philodryas"),
+        Cobra(nome=MATCH.nome, cor="verde"),
+        OR(
+            Cobra(nome=MATCH.nome, local_encontrado="arvore"),
+            Cobra(nome=MATCH.nome, local_encontrado="solo")
+        ),
+        NOT(Diagnostico(nome=MATCH.nome))
+    )
+    def nivel3_cipo_verde(self, nome):
+        print(f"[Nível 3] [Regra 14]: Gênero Philodryas + Cor verde + Árvore/Solo -> Diagnóstico: Cobra-cipó-verde")
+        self.declare(Diagnostico(
+            nome=nome,
+            nome_popular="Cobra-cipó-verde",
+            nome_cientifico="Philodryas olfersii",
+            familia="Colubridae",
+            genero="Philodryas"
+        ))
+
+    # Regra 15: Corre-campo
+    @Rule(
+        Genero(nome=MATCH.nome, genero="Philodryas"),
+        Cobra(nome=MATCH.nome, cor="marrom_amarelo", padrao_corpo="pontos_escuros"),
+        OR(
+            Cobra(nome=MATCH.nome, local_encontrado="estrada"),
+            Cobra(nome=MATCH.nome, local_encontrado="lajedo"),
+            Cobra(nome=MATCH.nome, local_encontrado="area_descampada")
+        ),
+        NOT(Diagnostico(nome=MATCH.nome))
+    )
+    def nivel3_corre_campo(self, nome):
+        print(f"[Nível 3] [Regra 15]: Gênero Philodryas + Marrom/Amarelo com pontos + Estrada/Lajedo/Descampado -> Diagnóstico: Corre-campo")
+        self.declare(Diagnostico(
+            nome=nome,
+            nome_popular="Corre-campo",
+            nome_cientifico="Philodryas nattereri",
+            familia="Colubridae",
+            genero="Philodryas"
+        ))
+
+    # Regra 16: Jiboia
+    @Rule(
+        Genero(nome=MATCH.nome, genero="Boa"),
+        Cobra(nome=MATCH.nome, cor="amarelada"),
+        OR(
+            Cobra(nome=MATCH.nome, local_encontrado="terrestre"),
+            Cobra(nome=MATCH.nome, local_encontrado="arvore"),
+            Cobra(nome=MATCH.nome, local_encontrado="galinheiro")
+        ),
+        NOT(Diagnostico(nome=MATCH.nome))
+    )
+    def nivel3_jiboia(self, nome):
+        print(f"[Nível 3] [Regra 16]: Gênero Boa + Amarelada + Terrestre/Árvore/Galinheiro -> Diagnóstico: Jiboia")
+        self.declare(Diagnostico(
+            nome=nome,
+            nome_popular="Jiboia",
+            nome_cientifico="Boa constrictor",
+            familia="Boidae",
+            genero="Boa"
+        ))
+
+
+
+
+
+
+    #CÓDIGO INICIAL QUE FELIPE FEZ
+
+    """
+    @Rule(Cobra(fosseta=P(lambda h: h is True), nome=MATCH.nome))
+    def regra_virpidae(self, nome):
+        print(f"{nome} pertence a familia Virperidae")
+        self.declare(Familia(familia="Virperidae", nome=nome))
+
+    @Rule(Cobra(padrao="triangulo", nome=MATCH.nome), Familia(familia="Virperidae", nome=MATCH.nome))
+    def regra_bothrops(self, nome):
+        print(f"{nome} pertence ao genero Bothrops")
+        self.declare(Genero(genero="Bothrops", nome=nome))
+
+    @Rule(Cobra(cauda="chocalho", nome=MATCH.nome), Familia(familia="Virperidae", nome=MATCH.nome))
+    def regra_crotalus(self, nome):
+        print(f"{nome} pertence ao genero Crotalus")
+        self.declare(Genero(genero="Crotalus", nome=nome))
+
+    @Rule(Cobra(habitat="tropico" or "caatinga", nome=MATCH.nome), Genero(genero="Bothrops", nome=MATCH.nome))
+    def regra_jararaca(self, nome):
+        print(f"{nome} eh uma Jararaca")
+
+    @Rule(Cobra(habitat="tropico" or "caatinga", nome=MATCH.nome), Genero(genero="Crotalus", nome=MATCH.nome))
+        def regra_cascavel(self, nome):
+            print(f"{nome} eh uma Cascavel")
+    
+    """
+    
+#Testando tudo:
+identify = ProcessoIdentificacao()
+identify.reset()
+
+# 1. Jararaca-da-Caatinga
+identify.declare(Cobra(
+    nome="Cobra 1", 
+    tem_fosseta_loreal=True, 
+    padrao_corpo="triângulos", 
+    cor="marrom_cinza", 
+    tamanho_medio=0.54,
+    local_encontrado="floresta"
+))
+
+identify.declare(Cobra(nome="Jujuba", cauda="chocalho"))
+
+identify.run()
