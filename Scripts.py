@@ -187,7 +187,7 @@ class ProcessoIdentificacao(KnowledgeEngine):
         NOT(Diagnostico(nome=MATCH.nome))
     )
     def nivel3_jararaca(self, nome):
-        print(f"[Nível 3] [Regra 11]: Gênero Bothrops + Marrom/Cinza + Floresta/Área Urbana -> Diagnóstico: Jararaca-da-Caatinga")
+        print(f"[Nível 3] [Regra 11]: Gênero Bothrops + Marrom/Cinza + Floresta/Área Urbana -> Diagnóstico: Jararaca-da-Caatinga\n")
         self.declare(Diagnostico(
             nome=nome,
             nome_popular="Jararaca-da-Caatinga",
@@ -203,7 +203,7 @@ class ProcessoIdentificacao(KnowledgeEngine):
         NOT(Diagnostico(nome=MATCH.nome))
     )
     def nivel3_coral_verdadeira(self, nome):
-        print(f"[Nível 3] [Regra 12]: Gênero Micrurus + Cauda curta + Subterrâneo -> Diagnóstico: Coral-verdadeira")
+        print(f"[Nível 3] [Regra 12]: Gênero Micrurus + Cauda curta + Subterrâneo -> Diagnóstico: Coral-verdadeira\n")
         self.declare(Diagnostico(
             nome=nome,
             nome_popular="Coral-verdadeira",
@@ -219,7 +219,7 @@ class ProcessoIdentificacao(KnowledgeEngine):
         NOT(Diagnostico(nome=MATCH.nome))
     )
     def nivel3_falsa_coral(self, nome):
-        print(f"[Nível 3] [Regra 13]: Gênero Oxyrhopus + Cauda longa + Caatinga Terrestre -> Diagnóstico: Falsa-coral")
+        print(f"[Nível 3] [Regra 13]: Gênero Oxyrhopus + Cauda longa + Caatinga Terrestre -> Diagnóstico: Falsa-coral\n")
         self.declare(Diagnostico(
             nome=nome,
             nome_popular="Falsa-coral",
@@ -239,7 +239,7 @@ class ProcessoIdentificacao(KnowledgeEngine):
         NOT(Diagnostico(nome=MATCH.nome))
     )
     def nivel3_cipo_verde(self, nome):
-        print(f"[Nível 3] [Regra 14]: Gênero Philodryas + Cor verde + Árvore/Solo -> Diagnóstico: Cobra-cipó-verde")
+        print(f"[Nível 3] [Regra 14]: Gênero Philodryas + Cor verde + Árvore/Solo -> Diagnóstico: Cobra-cipó-verde\n")
         self.declare(Diagnostico(
             nome=nome,
             nome_popular="Cobra-cipó-verde",
@@ -260,7 +260,7 @@ class ProcessoIdentificacao(KnowledgeEngine):
         NOT(Diagnostico(nome=MATCH.nome))
     )
     def nivel3_corre_campo(self, nome):
-        print(f"[Nível 3] [Regra 15]: Gênero Philodryas + Marrom/Amarelo com pontos + Estrada/Lajedo/Descampado -> Diagnóstico: Corre-campo")
+        print(f"[Nível 3] [Regra 15]: Gênero Philodryas + Marrom/Amarelo com pontos + Estrada/Lajedo/Descampado -> Diagnóstico: Corre-campo\n")
         self.declare(Diagnostico(
             nome=nome,
             nome_popular="Corre-campo",
@@ -281,7 +281,7 @@ class ProcessoIdentificacao(KnowledgeEngine):
         NOT(Diagnostico(nome=MATCH.nome))
     )
     def nivel3_jiboia(self, nome):
-        print(f"[Nível 3] [Regra 16]: Gênero Boa + Amarelada + Terrestre/Árvore/Galinheiro -> Diagnóstico: Jiboia")
+        print(f"[Nível 3] [Regra 16]: Gênero Boa + Amarelada + Terrestre/Árvore/Galinheiro -> Diagnóstico: Jiboia\n")
         self.declare(Diagnostico(
             nome=nome,
             nome_popular="Jiboia",
@@ -327,7 +327,7 @@ class ProcessoIdentificacao(KnowledgeEngine):
 identify = ProcessoIdentificacao()
 identify.reset()
 
-# 1. Jararaca-da-Caatinga
+# Teste 1: Jararaca-da-Caatinga
 identify.declare(Cobra(
     nome="Cobra 1", 
     tem_fosseta_loreal=True, 
@@ -337,6 +337,57 @@ identify.declare(Cobra(
     local_encontrado="floresta"
 ))
 
+#Teste 2: Cascavél com saliência
 identify.declare(Cobra(nome="Jujuba", cauda="chocalho"))
+
+# Teste 3: Coral-verdadeira (Trajeto esperado: Elapidae -> Micrurus -> Diagnóstico)
+identify.declare(Cobra(
+    nome="Teste_Coral_Verdadeira", 
+    tem_fosseta_loreal=False, 
+    padrao_corpo="aneis_completos", 
+    padrao_cauda="curta", 
+    local_encontrado="subterraneo",
+    tamanho_medio=1.0
+))
+
+# Teste 4: Falsa-coral (Trajeto esperado: Colubridae -> Oxyrhopus -> Diagnóstico)
+identify.declare(Cobra(
+    nome="Teste_Falsa_Coral", 
+    tem_fosseta_loreal=False, 
+    padrao_corpo="aneis_incompletos", 
+    padrao_cauda="longa", 
+    local_encontrado="caatinga_terrestre",
+    tamanho_medio=0.70
+))
+
+# Teste 5: Cobra-cipó-verde (Trajeto esperado: Colubridae -> Philodryas -> Diagnóstico)
+identify.declare(Cobra(
+    nome="Teste_Cipo_Verde", 
+    tem_fosseta_loreal=False, 
+    cor="verde", 
+    padrao_corpo="uniforme", 
+    local_encontrado="arvore",
+    tamanho_medio=1.0
+))
+
+# Teste 6: Corre-campo (Trajeto esperado: Colubridae -> Philodryas -> Diagnóstico)
+identify.declare(Cobra(
+    nome="Teste_Corre_Campo", 
+    tem_fosseta_loreal=False, 
+    cor="marrom_amarelo", 
+    padrao_corpo="pontos_escuros", 
+    local_encontrado="estrada",
+    tamanho_medio=1.5
+))
+
+# Teste 7: Jiboia (Trajeto esperado: Boidae -> Boa -> Diagnóstico)
+identify.declare(Cobra(
+    nome="Teste_Jiboia", 
+    tem_fosseta_loreal=False, 
+    cor="amarelada", 
+    padrao_corpo="listras_largas", 
+    local_encontrado="galinheiro",
+    tamanho_medio=4.0
+))
 
 identify.run()
