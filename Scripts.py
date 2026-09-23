@@ -108,8 +108,8 @@ class ProcessoIdentificacao(KnowledgeEngine):
             nome=MATCH.nome, 
             tem_fosseta_loreal=False, 
             tamanho_medio=P(lambda t: t < 2.0),
-            padrao_corpo=P(lambda p: p != "aneis_completos")  # Impede capturar a Coral-verdadeira
         ),
+        NOT(Cobra(nome=MATCH.nome, padrao_corpo="aneis_completos")), #Impede de captar cobra Coral verdadeira
         NOT(Diagnostico(nome=MATCH.nome))
     )
     def nivel1_colubridae(self, nome):
