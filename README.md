@@ -40,6 +40,7 @@ O processo de inferência é estruturado em **3 níveis de encadeamento**:
   * **Habitat:** Áreas florestadas e áreas urbanas
   * **Cor/Padrão:** Marrom com malha cinza e desenhos em formato de triângulos pretos/castanhos
   * **Fosseta Loreal?:** Sim
+  * **Tem peçonha?:** Sim
 
 * **Cascavel (*Crotalus durissus*)**
   * **Gênero:** *Crotalus*
@@ -48,6 +49,7 @@ O processo de inferência é estruturado em **3 níveis de encadeamento**:
   * **Cor/Padrão:** Cinza com malha cinza mais clara
   * **Fosseta Loreal?:** Sim
   * **Cauda:** Presença de chocalho (guizo)
+  * **Tem peçonha?:** Sim
 
 ### 2. Família Elapidae
 * **Coral-verdadeira (*Micrurus ibiboboca*)**
@@ -57,7 +59,8 @@ O processo de inferência é estruturado em **3 níveis de encadeamento**:
   * **Cor/Padrão:** Anéis coloridos (vermelho, preto, branco/amarelo) que circundam todo o corpo
   * **Fosseta Loreal?:** Não
   * **Cauda:** Curta
-
+  * * **Tem peçonha?:** Sim
+      
 ### 3. Família Colubridae (ou Dipsadidae)
 * **Falsa-coral (*Oxyrhopus trigeminus*)**
   * **Gênero:** *Oxyrhopus*
@@ -66,6 +69,7 @@ O processo de inferência é estruturado em **3 níveis de encadeamento**:
   * **Cor/Padrão:** Preto, vermelho e branco com anéis incompletos (não circundam a barriga)
   * **Fosseta Loreal?:** Não
   * **Cauda:** Longa
+  * **Tem peçonha?:** Não
 
 * **Cobra-cipó-verde (*Philodryas olfersii*)**
   * **Gênero:** *Philodryas*
@@ -74,6 +78,7 @@ O processo de inferência é estruturado em **3 níveis de encadeamento**:
   * **Cor/Padrão:** Verde uniforme
   * **Fosseta Loreal?:** Não
   * **Cauda:** Comum
+  * **Tem peçonha?:** Não
 
 * **Corre-campo (*Philodryas nattereri*)**
   * **Gênero:** *Philodryas*
@@ -82,6 +87,7 @@ O processo de inferência é estruturado em **3 níveis de encadeamento**:
   * **Cor/Padrão:** Tom marrom com amarelo e pontinhos escuros pelo corpo
   * **Fosseta Loreal?:** Não
   * **Cauda:** Comum
+  * **Tem peçonha?:** Não
 
 ### 4. Família Boidae
 * **Jiboia (*Boa constrictor*)**
@@ -91,6 +97,7 @@ O processo de inferência é estruturado em **3 níveis de encadeamento**:
   * **Cor/Padrão:** Amarelada com listras largas transversais castanhas
   * **Fosseta Loreal?:** Não
   * **Cauda:** Listras transversais nítidas
+  * **Tem peçonha?:** Não
 
 ---
 
