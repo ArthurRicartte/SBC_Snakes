@@ -131,20 +131,20 @@ O processo de inferência é estruturado em **3 níveis de encadeamento**:
 
 ## 🧪 Casos de Teste
 
-### Caso de Teste 1: Atalho por Saliência (Cascavel)
+### Caso de Teste 1: (Cascavel)
 * **Entrada:** `Cobra(nome="T1", tem_fosseta_loreal=True, padrao_cauda="chocalho")`
 * **Cadeia Esperada:** Disparo imediato da Regra 1 via `salience=100`.
 * **Saída:** Diagnóstico: **Cascavel (*Crotalus durissus*)**
 
-### Caso de Teste 2: Encadeamento Completo (Jararaca)
-* **Entrada:** `Cobra(nome="T2", tem_fosseta_loreal=True, padrao_corpo="triângulos", cor="marrom_cinza", local_encontrado="floresta", tamanho_medio=0.54)`
+### Caso de Teste 2: (Coral-verdadeira)
+* **Entrada:** `Cobra(nome="T2", tem_fosseta_loreal=False, padrao_corpo="aneis_completos", padrao_cauda="curta", local_encontrado="subterraneo", tamanho_medio=1.0)`
 * **Cadeia Esperada:**
-  1. Nível 1: Dispara Regra 2 $\rightarrow$ Declara `Familia(familia="Viperidae")`
-  2. Nível 2: Dispara Regra 6 $\rightarrow$ Declara `Genero(genero="Bothrops")`
-  3. Nível 3: Dispara Regra 11 $\rightarrow$ Diagnóstico final
-* **Saída:** Diagnóstico: **Jararaca-da-Caatinga (*Bothrops erythromelas*)**
+  1. Nível 1: Dispara Regra 3 $\rightarrow$ Declara `Familia(familia="Elapidae")`
+  2. Nível 2: Dispara Regra 7 $\rightarrow$ Declara `Genero(genero="Micrurus")`
+  3. Nível 3: Dispara Regra 12 $\rightarrow$ Diagnóstico final
+* **Saída:** Diagnóstico: **Coral-verdadeira (*Micrurus ibiboboca*)**
 
-### Caso de Teste 3: Negação Lógica e Resolução por Desempate (Cobra-cipó-verde)
+### Caso de Teste 3: (Cobra-cipó-verde)
 * **Entrada:** `Cobra(nome="T3", tem_fosseta_loreal=False, cor="verde", padrao_corpo="uniforme", local_encontrado="arvore", tamanho_medio=1.0)`
 * **Cadeia Esperada:**
   1. Nível 1: Dispara Regra 5 (valida `NOT(Cobra(padrao_corpo="aneis_completos"))`) $\rightarrow$ Declara `Familia(familia="Colubridae")`
@@ -156,16 +156,23 @@ O processo de inferência é estruturado em **3 níveis de encadeamento**:
 
 ## 🚀 Como Executar
 
-1. Crie e ative o ambiente virtual:
-   ```bash
-   python -m venv venv_sbc
-   .\venv_sbc\Scripts\activate
+### 🌐 Opção 1: Executar no Google Colab (Sem instalação):  
+[Teste nosso projeto pelo google colab](https://colab.research.google.com/drive/1-KpsYNxMu12ihCvHcgnra-K6h_Egevxl?usp=sharing)
 
 ---
 
-## ♾️ Link Colab e Referências
+### 💻 Opção 2: Executar Localmente
+- **Requisito:** O projeto foi desenvolvido utilizando o Python 3.9.13[link para o site do python](https://www.python.org/downloads/release/python-3913/).
 
-* **Google Colab:** [Teste nosso projeto pelo google colab](https://colab.research.google.com/drive/1-KpsYNxMu12ihCvHcgnra-K6h_Egevxl?usp=sharing)
-* **Base de Dados Taxonômica:** [Naturalits](https://www.inaturalist.org/taxa/539413/taxonomy_details)
+1. Certifique-se de ter o Python 3.9.13 instalado na sua máquina.
+2. Crie e ative o ambiente virtual:
+   ```bash
+   python -m venv venv_sbc
+   .\venv_sbc\Scripts\activate
+---
+
+## ♾️ Referências
+
+* **Base de Dados Taxonômica:** [Naturalits](https://www.inaturalist.org/)
 * **Manual sobre as serpentes:** [Manual serpentes da caatinga](http://labherpeto.cb.ufrn.br/pdf/manual.pdf)
   
