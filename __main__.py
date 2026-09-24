@@ -17,7 +17,6 @@ class Cobra(Fact):
     Será o fato de entrada na memória de trabalho, pode conter as caracterísitcas físicas de uma cobra:
     Tamanho_médio = float
     local_encontrado = onde o usuário encontrou o animal = floresta, sertão (caatinga), área residencial, árvore, etc 
-    eh_agressiva = (valor booleano sim ou não)
     cor = string
     padrão_corpo = string descrevendo brevemente os padrões de corpo do animal
     tem_fosseta_loreal = (Valor booleano sim ou não)
@@ -71,7 +70,7 @@ class ProcessoIdentificacao(KnowledgeEngine):
     #Regra 1: tentativa de disparar regra de saliência máxima: Caso a cobra tenha chocalho na cauda -> Cascavél (Característica muito predominante)
     @Rule(Cobra(nome=MATCH.nome, padrao_cauda="chocalho"), NOT(Diagnostico(nome=MATCH.nome)), salience=100)
     def atalho_cascavel(self, nome):
-        print(f"[red][SALIENCE 100] [Regra 1][/] -> Chocalho detectado! {nome} é uma [red]Cascavel (Crotalus durissus).[/]\n") #Testando o print do rich
+        print(f"[red][SALIENCE 100] [Regra 1][/] -> Chocalho detectado! {nome} é uma [red]Cascavel (Crotalus durissus).[/] ([red]Peçonhenta[/])\n") #Testando o print do rich
         self.declare(Diagnostico(
             nome=nome,
             nome_popular="Cascavel",
@@ -197,7 +196,7 @@ class ProcessoIdentificacao(KnowledgeEngine):
         NOT(Diagnostico(nome=MATCH.nome))
     )
     def nivel3_jararaca(self, nome):
-        print(f"[purple][Nível 3] [Regra 11]:[/] Gênero Bothrops + Marrom/Cinza + Floresta/Área Urbana -> Diagnóstico: [green]{nome}[/] é uma [green]Jararaca-da-Caatinga[/]\n")
+        print(f"[purple][Nível 3] [Regra 11]:[/] Gênero Bothrops + Marrom/Cinza + Floresta/Área Urbana -> Diagnóstico: [green]{nome}[/] é uma [green]Jararaca-da-Caatinga[/] ([red]Peçonhenta[/])\n")
         self.declare(Diagnostico(
             nome=nome,
             nome_popular="Jararaca-da-Caatinga",
@@ -211,7 +210,7 @@ class ProcessoIdentificacao(KnowledgeEngine):
         NOT(Diagnostico(nome=MATCH.nome))
     )
     def nivel3_coral_verdadeira(self, nome):
-        print(f"[purple][Nível 3] [Regra 12]:[/] Gênero Micrurus + Cauda curta + Subterrâneo -> Diagnóstico: [green]{nome}[/] é uma [green]Coral-verdadeira[/]\n")
+        print(f"[purple][Nível 3] [Regra 12]:[/] Gênero Micrurus + Cauda curta + Subterrâneo -> Diagnóstico: [green]{nome}[/] é uma [green]Coral-verdadeira[/] ([red]Peçonhenta[/])\n")
         self.declare(Diagnostico(
             nome=nome,
             nome_popular="Coral-verdadeira",
@@ -225,7 +224,7 @@ class ProcessoIdentificacao(KnowledgeEngine):
         NOT(Diagnostico(nome=MATCH.nome))
     )
     def nivel3_falsa_coral(self, nome):
-        print(f"[purple][Nível 3] [Regra 13]:[/] Gênero Oxyrhopus + Cauda longa + Caatinga Terrestre -> Diagnóstico: [green]{nome}[/] é uma [green]Falsa-coral[/]\n")
+        print(f"[purple][Nível 3] [Regra 13]:[/] Gênero Oxyrhopus + Cauda longa + Caatinga Terrestre -> Diagnóstico: [green]{nome}[/] é uma [green]Falsa-coral[/] ([green]Não peçonhenta[/])\n")
         self.declare(Diagnostico(
             nome=nome,
             nome_popular="Falsa-coral",
@@ -243,7 +242,7 @@ class ProcessoIdentificacao(KnowledgeEngine):
         NOT(Diagnostico(nome=MATCH.nome))
     )
     def nivel3_cipo_verde(self, nome):
-        print(f"[purple][Nível 3] [Regra 14]:[/] Gênero Philodryas + Cor verde + Árvore/Solo -> Diagnóstico: [green]{nome}[/] é uma [green]Cobra-cipó-verde[/]\n")
+        print(f"[purple][Nível 3] [Regra 14]:[/] Gênero Philodryas + Cor verde + Árvore/Solo -> Diagnóstico: [green]{nome}[/] é uma [green]Cobra-cipó-verde[/] ([green]Não peçonhenta[/])\n")
         self.declare(Diagnostico(
             nome=nome,
             nome_popular="Cobra-cipó-verde",
@@ -262,7 +261,7 @@ class ProcessoIdentificacao(KnowledgeEngine):
         NOT(Diagnostico(nome=MATCH.nome))
     )
     def nivel3_corre_campo(self, nome):
-        print(f"[purple][Nível 3] [Regra 15]:[/] Gênero Philodryas + Marrom/Amarelo com pontos + Estrada/Lajedo/Descampado -> Diagnóstico: [green]{nome}[/] é uma [green] Corre-campo[/]\n")
+        print(f"[purple][Nível 3] [Regra 15]:[/] Gênero Philodryas + Marrom/Amarelo com pontos + Estrada/Lajedo/Descampado -> Diagnóstico: [green]{nome}[/] é uma [green]Corre-campo[/] ([green]Não peçonhenta[/])\n")
         self.declare(Diagnostico(
             nome=nome,
             nome_popular="Corre-campo",
@@ -281,7 +280,7 @@ class ProcessoIdentificacao(KnowledgeEngine):
         NOT(Diagnostico(nome=MATCH.nome))
     )
     def nivel3_jiboia(self, nome):
-        print(f"[purple][Nível 3] [Regra 16]:[/] Gênero Boa + Amarelada + Terrestre/Árvore/Galinheiro -> Diagnóstico: [green]{nome}[/] é uma [green] Jiboia[/]\n")
+        print(f"[purple][Nível 3] [Regra 16]:[/] Gênero Boa + Amarelada + Terrestre/Árvore/Galinheiro -> Diagnóstico: [green]{nome}[/] é uma [green]Jiboia[/] ([green]Não peçonhenta[/])\n")
         self.declare(Diagnostico(
             nome=nome,
             nome_popular="Jiboia",
@@ -294,11 +293,10 @@ def main():
     identify = ProcessoIdentificacao()
     identify.reset()
 
-    """"
-        #Teste 1: Cascavél com saliência
-        identify.declare(Cobra(nome="Jujuba", padrao_cauda="chocalho"))
-    """
-
+    
+    #Teste 1: Cascavél com saliência
+    #identify.declare(Cobra(nome="Jujuba", padrao_cauda="chocalho"))
+    
     """"
     # Teste 2: Jararaca-da-Caatinga
     identify.declare(Cobra(
@@ -310,8 +308,8 @@ def main():
         local_encontrado="floresta"
     ))
     """
-
-    """"
+    
+    """
     # Teste 3: Coral-verdadeira (Trajeto esperado: Elapidae -> Micrurus -> Diagnóstico)
     identify.declare(Cobra(
         nome="Teste_3", 
@@ -322,8 +320,8 @@ def main():
         tamanho_medio=1.0
     ))
     """
-
-    """"
+    
+    """
     # Teste 4: Falsa-coral (Trajeto esperado: Colubridae -> Oxyrhopus -> Diagnóstico)
     identify.declare(Cobra(
         nome="Teste_4", 
@@ -334,8 +332,8 @@ def main():
         tamanho_medio=0.70
     ))
     """
-
-    """"
+    
+    """
     # Teste 5: Cobra-cipó-verde (Trajeto esperado: Colubridae -> Philodryas -> Diagnóstico)
     identify.declare(Cobra(
         nome="Teste_5", 
@@ -347,7 +345,7 @@ def main():
     ))
     """
 
-    """"
+    """
     # Teste 6: Corre-campo (Trajeto esperado: Colubridae -> Philodryas -> Diagnóstico)
     identify.declare(Cobra(
         nome="Teste_6", 
@@ -359,7 +357,7 @@ def main():
     ))
     """
 
-    """"
+    """
     # Teste 7: Jiboia (Trajeto esperado: Boidae -> Boa -> Diagnóstico)
     identify.declare(Cobra(
         nome="Teste_7", 
