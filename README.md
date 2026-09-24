@@ -59,7 +59,7 @@ O processo de inferência é estruturado em **3 níveis de encadeamento**:
   * **Cor/Padrão:** Anéis coloridos (vermelho, preto, branco/amarelo) que circundam todo o corpo
   * **Fosseta Loreal?:** Não
   * **Cauda:** Curta
-  * * **Tem peçonha?:** Sim
+  * **Tem peçonha?:** Sim
       
 ### 3. Família Colubridae (ou Dipsadidae)
 * **Falsa-coral (*Oxyrhopus trigeminus*)**
