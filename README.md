@@ -129,7 +129,7 @@ O processo de inferência é estruturado em **3 níveis de encadeamento**:
 
 ---
 
-## 🧪 Casos de Teste
+## 🧑‍🔬 Casos de Teste
 
 ### Caso de Teste 1: (Cascavel)
 * **Entrada:** `Cobra(nome="T1", tem_fosseta_loreal=True, padrao_cauda="chocalho")`
@@ -154,7 +154,7 @@ O processo de inferência é estruturado em **3 níveis de encadeamento**:
 
 ---
 
-## 🚀 Como Executar
+## ⚙️ Como Executar
 
 ### 🌐 Opção 1: Executar no Google Colab (Sem instalação):  
 [Teste nosso projeto pelo google colab](https://colab.research.google.com/drive/1-KpsYNxMu12ihCvHcgnra-K6h_Egevxl?usp=sharing)
