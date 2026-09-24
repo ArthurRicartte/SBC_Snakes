@@ -160,3 +160,9 @@ O processo de inferência é estruturado em **3 níveis de encadeamento**:
    ```bash
    python -m venv venv_sbc
    .\venv_sbc\Scripts\activate
+
+---
+
+## ♾️ Link Colab
+
+https://colab.research.google.com/drive/1-KpsYNxMu12ihCvHcgnra-K6h_Egevxl?usp=sharing
