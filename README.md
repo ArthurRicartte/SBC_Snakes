@@ -163,6 +163,9 @@ O processo de inferência é estruturado em **3 níveis de encadeamento**:
 
 ---
 
-## ♾️ Link Colab
+## ♾️ Link Colab e Referências
 
-https://colab.research.google.com/drive/1-KpsYNxMu12ihCvHcgnra-K6h_Egevxl?usp=sharing
+* **Google Colab:** [Teste nosso projeto pelo google colab](https://colab.research.google.com/drive/1-KpsYNxMu12ihCvHcgnra-K6h_Egevxl?usp=sharing)
+* **Base de Dados Taxonômica:** [Naturalits](https://www.inaturalist.org/taxa/539413/taxonomy_details)
+* **Manual sobre as serpentes:** [Manual serpentes da caatinga](http://labherpeto.cb.ufrn.br/pdf/manual.pdf)
+  
