@@ -152,6 +152,14 @@ O processo de inferência é estruturado em **3 níveis de encadeamento**:
   3. Nível 3: Dispara Regra 14 $\rightarrow$ Diagnóstico final
 * **Saída:** Diagnóstico: **Cobra-cipó-verde (*Philodryas olfersii*)**
 
+### Caso de Teste 4: (Cobra não identificada)
+* **Entrada:** `Cobra(nome="T3", tem_fosseta_loreal=False, cor="verde", padrao_corpo="uniforme", local_encontrado="arvore", tamanho_medio=1.0)`
+* **Cadeia Esperada:**
+  1. Nível 1: N/D
+  2. Nível 2: N/D
+  3. Nível 3: N/D
+* **Saída:** Diagnóstico: **pertence à família Colubridae**
+
 ---
 
 ## ⚙️ Como Executar
